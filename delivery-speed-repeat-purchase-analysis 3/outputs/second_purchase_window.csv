@@ -1,0 +1,13 @@
+period,start_day,chance_of_returning_pct,cumulative_returned_pct
+Days 0 to 30,0,0.544,0.54
+Days 31 to 60,30,0.335,0.88
+Days 61 to 90,60,0.229,1.1
+Days 91 to 120,90,0.244,1.34
+Days 121 to 150,120,0.188,1.53
+Days 151 to 180,150,0.214,1.74
+Days 181 to 210,180,0.201,1.94
+Days 211 to 240,210,0.157,2.09
+Days 241 to 270,240,0.174,2.26
+Days 271 to 300,270,0.191,2.45
+Days 301 to 330,300,0.193,2.64
+Days 331 to 360,330,0.138,2.77

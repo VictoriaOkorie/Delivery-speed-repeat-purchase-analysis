@@ -1,0 +1,10 @@
+Loaded 99,441 orders, 112,650 order items, 99,224 reviews, 96,096 unique customers.
+customer_id has 99,441 values but there are only 96,096 real people (customer_unique_id). All repeat purchase logic uses customer_unique_id.
+Removed 20 orders placed after 2018-09-01 (the data trails off).
+1,098 review rows belonged to orders with more than one review; kept the latest per order.
+0 orders had a delivery date on or before the purchase date; delivery fields set to missing.
+96,090 customers in total.
+1,263 later orders were placed before the first order arrived (mostly same-day split baskets). They are not counted as returns, because the delivery experience could not have influenced them.
+Study group: 52,542 customers. Left out 2,845 whose first order was never delivered (or has no delivery date) and 40,703 delivered too recently to watch for 180 days.
+Within the study group, 959 customers returned within 180 days (1.83%).
+Saved fact_orders (99,421 rows), fact_customers (96,090 rows), dim_state (27 rows), dim_category (74 rows).

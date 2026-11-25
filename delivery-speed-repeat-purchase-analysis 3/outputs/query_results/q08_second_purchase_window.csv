@@ -1,0 +1,9 @@
+days_after_first_delivery,returning_customers,share_pct,cumulative_share_pct
+01. 0 to 30 days,109,15.3,15.3
+02. 31 to 60 days,70,9.8,25.1
+03. 61 to 90 days,55,7.7,32.8
+04. 91 to 120 days,65,9.1,41.9
+05. 121 to 180 days,103,14.4,56.4
+06. 181 to 270 days,116,16.3,72.7
+07. 271 to 365 days,120,16.8,89.5
+08. More than 365 days,75,10.5,100.0

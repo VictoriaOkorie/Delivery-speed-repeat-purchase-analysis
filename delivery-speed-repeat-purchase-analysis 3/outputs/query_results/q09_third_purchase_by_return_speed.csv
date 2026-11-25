@@ -1,0 +1,4 @@
+second_purchase_timing,returning_customers,made_third_purchase,third_purchase_rate_pct
+1. Returned within 30 days,491,42,8.6
+2. Returned in 31 to 90 days,449,47,10.5
+3. Returned after 90 days,852,65,7.6

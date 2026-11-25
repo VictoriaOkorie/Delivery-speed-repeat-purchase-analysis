@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The First Delivery Decides</title>
+<meta name="description" content="A data story about delivery speed, repeat purchase and the second purchase window, by Victoria Okorie.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,700;1,6..72,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  color-scheme: light;
+  --bg: #fbfaf7;
+  --surface: #ffffff;
+  --ink: #141413;
+  --ink-2: #3d3d3a;
+  --muted: #6b6a65;
+  --rule: #e4e2dc;
+  --grid: #ecebe6;
+  --accent: #2a78d6;
+  --accent-soft: #e6f0fb;
+  --alert: #e34948;
+  --context: #c9c8c2;
+  --mid: #8a8984;
+  --pull: #b3261e;
+  --tip-bg: #141413;
+  --tip-ink: #ffffff;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #161615; --surface: #1d1d1c; --ink: #f0efec; --ink-2: #d6d5d0; --muted: #a3a29b;
+    --rule: #33322f; --grid: #2b2a28; --accent: #3987e5; --accent-soft: #1b2b40; --alert: #e66767;
+    --context: #55544f; --mid: #8f8e88; --pull: #f08a84; --tip-bg: #f0efec; --tip-ink: #141413;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #161615; --surface: #1d1d1c; --ink: #f0efec; --ink-2: #d6d5d0; --muted: #a3a29b;
+  --rule: #33322f; --grid: #2b2a28; --accent: #3987e5; --accent-soft: #1b2b40; --alert: #e66767;
+  --context: #55544f; --mid: #8f8e88; --pull: #f08a84; --tip-bg: #f0efec; --tip-ink: #141413;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: "Newsreader", Georgia, "Times New Roman", serif;
+  font-size: 20px; line-height: 1.6;
+}
+.sans { font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif; }
+.wrap { max-width: 680px; margin: 0 auto; padding: 0 16px; }
+.wide { max-width: 920px; margin: 0 auto; padding: 0 16px; }
+
+/* Masthead */
+.kicker { font-family: "Inter", sans-serif; font-size: 13px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--accent); font-weight: 600; margin: 0 0 18px; }
+header.hero { padding: 72px 0 40px; border-bottom: 1px solid var(--rule); }
+h1 { font-size: clamp(42px, 7vw, 72px); line-height: 1.02; letter-spacing: -0.02em; margin: 0 0 22px; font-weight: 700; }
+.dek { font-size: clamp(21px, 2.6vw, 26px); line-height: 1.4; color: var(--ink-2); margin: 0 0 28px; font-style: italic; }
+.byline { font-family: "Inter", sans-serif; font-size: 14px; color: var(--muted); }
+.byline strong { color: var(--ink); font-weight: 600; }
+
+/* Parcel counter hero graphic */
+.parcels { margin: 40px 0 8px; display: grid; grid-template-columns: repeat(25, 1fr); gap: 4px; max-width: 520px; }
+.parcels span { aspect-ratio: 1; border-radius: 3px; background: var(--context); opacity: .55; }
+.parcels span.back { background: var(--accent); opacity: 1; }
+.parcels-cap { font-family: "Inter", sans-serif; font-size: 13px; color: var(--muted); max-width: 520px; }
+
+article { padding: 48px 0 24px; }
+article p { margin: 0 0 1.15em; }
+.lede::first-letter { float: left; font-size: 88px; line-height: .82; padding: 8px 10px 0 0; font-weight: 700; color: var(--accent); }
+h2 { font-family: "Inter", sans-serif; font-size: 26px; line-height: 1.25; letter-spacing: -0.01em; margin: 64px 0 18px; font-weight: 700; }
+h2 .num { color: var(--accent); margin-right: 10px; }
+strong { font-weight: 700; }
+em { font-style: italic; }
+a { color: var(--accent); }
+
+.pull { margin: 44px 0; padding: 0 0 0 22px; border-left: 4px solid var(--accent); font-size: 30px; line-height: 1.3; font-weight: 500; }
+.pull cite { display: block; font-family: "Inter", sans-serif; font-style: normal; font-size: 13px; color: var(--muted); margin-top: 12px; }
+
+/* Stat row */
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; margin: 36px 0; }
+.stat { background: var(--surface); padding: 20px 18px; }
+.stat .v { font-family: "Inter", sans-serif; font-size: 36px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+.stat .v.alert { color: var(--alert); }
+.stat .v.good { color: var(--accent); }
+.stat .l { font-family: "Inter", sans-serif; font-size: 13px; color: var(--muted); line-height: 1.4; margin-top: 6px; }
+
+/* Figures */
+figure.chart { margin: 44px 0; padding: 22px 22px 16px; background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; }
+figure.chart h3 { font-family: "Inter", sans-serif; font-size: 18px; margin: 0 0 4px; line-height: 1.3; }
+figure.chart .sub { font-family: "Inter", sans-serif; font-size: 13.5px; color: var(--muted); margin: 0 0 14px; line-height: 1.45; }
+figure.chart figcaption { font-family: "Inter", sans-serif; font-size: 12px; color: var(--muted); margin-top: 10px; border-top: 1px solid var(--rule); padding-top: 10px; }
+.viz { position: relative; width: 100%; }
+.viz svg { display: block; width: 100%; height: auto; overflow: visible; }
+.viz text { font-family: "Inter", sans-serif; }
+.tip { position: absolute; pointer-events: none; background: var(--tip-bg); color: var(--tip-ink); font-family: "Inter", sans-serif;
+  font-size: 12.5px; line-height: 1.45; padding: 8px 10px; border-radius: 6px; white-space: nowrap; opacity: 0; transition: opacity .12s; z-index: 5; }
+.legend { display: flex; flex-wrap: wrap; gap: 16px; font-family: "Inter", sans-serif; font-size: 13px; color: var(--ink-2); margin: 0 0 8px; }
+.legend i { display: inline-block; width: 14px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
+details.table { margin-top: 8px; font-family: "Inter", sans-serif; font-size: 13px; }
+details.table summary { cursor: pointer; color: var(--muted); }
+details.table table { border-collapse: collapse; margin-top: 8px; width: 100%; }
+details.table td, details.table th { padding: 5px 8px; border-bottom: 1px solid var(--rule); text-align: right; }
+details.table td:first-child, details.table th:first-child { text-align: left; }
+
+/* Region table */
+table.score { width: 100%; border-collapse: collapse; font-family: "Inter", sans-serif; font-size: 14.5px; margin: 8px 0 0; }
+table.score th { text-align: right; font-weight: 600; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .05em; padding: 8px; border-bottom: 1px solid var(--rule); }
+table.score td { padding: 10px 8px; border-bottom: 1px solid var(--rule); text-align: right; font-variant-numeric: tabular-nums; }
+table.score th:first-child, table.score td:first-child { text-align: left; }
+.barcell { display: inline-block; height: 8px; border-radius: 4px; background: var(--accent); vertical-align: middle; margin-left: 8px; }
+
+/* Playbook timeline */
+.playbook { margin: 40px 0; position: relative; }
+.step { display: grid; grid-template-columns: 112px 1fr; gap: 18px; padding: 18px 0; border-top: 1px solid var(--rule); }
+.step:last-child { border-bottom: 1px solid var(--rule); }
+.step .when { font-family: "Inter", sans-serif; font-weight: 700; font-size: 15px; color: var(--accent); line-height: 1.3; }
+.step .when small { display: block; font-weight: 500; color: var(--muted); font-size: 12px; margin-top: 4px; }
+.step h4 { font-family: "Inter", sans-serif; margin: 0 0 4px; font-size: 17px; }
+.step p { margin: 0; font-size: 18px; color: var(--ink-2); }
+
+.box { margin: 40px 0; padding: 22px 24px; border-radius: 12px; background: var(--accent-soft); }
+.box h3 { font-family: "Inter", sans-serif; font-size: 15px; text-transform: uppercase; letter-spacing: .08em; margin: 0 0 10px; color: var(--accent); }
+.box p, .box li { font-size: 17.5px; }
+.box ul { margin: 0; padding-left: 20px; }
+
+footer { border-top: 1px solid var(--rule); margin-top: 56px; padding: 32px 0 72px; font-family: "Inter", sans-serif; font-size: 14px; color: var(--muted); line-height: 1.6; }
+footer h3 { color: var(--ink); font-size: 15px; margin: 0 0 8px; }
+footer p { margin: 0 0 12px; }
+
+.themebtn { position: fixed; top: 14px; right: 14px; font-family: "Inter", sans-serif; font-size: 12px; background: var(--surface); color: var(--ink-2);
+  border: 1px solid var(--rule); border-radius: 999px; padding: 6px 12px; cursor: pointer; z-index: 10; }
+
+@media (max-width: 640px) {
+  body { font-size: 18px; }
+  .stats { grid-template-columns: 1fr; }
+  .step { grid-template-columns: 1fr; gap: 6px; }
+  figure.chart { padding: 16px 12px 12px; margin-left: -4px; margin-right: -4px; }
+  .pull { font-size: 24px; }
+  .parcels { gap: 3px; }
+  header.hero { padding-top: 56px; }
+  table.score { font-size: 13px; }
+  table.score th { font-size: 10.5px; letter-spacing: .02em; padding: 6px 4px; }
+  table.score td { padding: 8px 4px; }
+  table.score th:nth-child(4), table.score td:nth-child(4), .barcell { display: none; }
+}
+#table-region { overflow-x: auto; }
+@media print {
+  .themebtn { display: none; }
+  body { background: #fff; font-size: 15px; }
+  figure.chart, .stats, .box, .step { break-inside: avoid; }
+  header.hero { padding-top: 24px; }
+  h2 { break-after: avoid; }
+}
+</style>
+</head>
+<body>
+<button class="themebtn" id="themebtn" type="button" aria-label="Switch light or dark theme">Dark mode</button>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">Data story · E-commerce growth and retention</p>
+    <h1>The First Delivery Decides</h1>
+    <p class="dek">What 96,000 Brazilian online shoppers reveal about the quiet link between a slow parcel and a customer who never comes back, and the 60 days a growth team has to win them again.</p>
+    <p class="byline">By <strong>Victoria Okorie</strong> · Data analysis, writing and charts · November 2026</p>
+    <div class="parcels" id="parcels" aria-hidden="true"></div>
+    <p class="parcels-cap">Each square is one in every 100 customers. Only <strong>3</strong> of them ever place a second order.</p>
+  </div>
+</header>
+
+<article>
+<div class="wrap">
+
+<p class="lede">Between the autumn of 2016 and the summer of 2018, roughly 96,000 people bought something through Olist, a company that connects small Brazilian shops to the country's biggest online marketplaces. They bought bed sheets and perfume, phone cases and garden hoses. Most of their orders arrived. Most of them left a review, usually a generous one. And then almost all of them disappeared.</p>
+
+<p>Of every 100 customers in the data, <strong>97 bought exactly once</strong>. In growth language, the marketplace was very good at acquiring customers and almost unable to keep them. That is not unusual for a marketplace, where shoppers come for a product rather than a shop. But it makes every returning customer valuable: across the customers I followed, those who came back spent on average <strong>{{extra_spend}} reais more</strong> over the period than those who bought once.</p>
+
+<p>So I asked a question most sales dashboards never ask. Not "what did customers buy?" but "<em>what happened to them after they bought?</em>" Specifically: does the experience of waiting for that first parcel change whether a person ever buys again?</p>
+
+<div class="stats">
+  <div class="stat"><div class="v">{{customers}}</div><div class="l">customers, followed from their first order</div></div>
+  <div class="stat"><div class="v">{{study}}</div><div class="l">followed for a full 180 days after their first delivery</div></div>
+  <div class="stat"><div class="v good">{{rate}}%</div><div class="l">came back and ordered again within those 180 days</div></div>
+</div>
+
+<h2><span class="num">1</span>A month on the doorstep</h2>
+
+<p>The typical first order took about <strong>11 days</strong> to arrive. A fifth arrived within a week. But a long tail did not: <strong>{{over30}} customers</strong> in the study group waited more than a month for their very first parcel.</p>
+
+<p>When I split customers by how long that first delivery took, the pattern was hard to miss. The faster the parcel, the more likely the customer was to come back.</p>
+
+<figure class="chart">
+  <h3>The slower the first delivery, the fewer customers come back</h3>
+  <p class="sub">Share of new customers who ordered again within 180 days of their first delivery, by days to deliver that first order. Hover or tap a bar for details.</p>
+  <div class="viz" id="chart-speed"></div>
+  <details class="table"><summary>Show the numbers as a table</summary><div id="table-speed"></div></details>
+  <figcaption>Thin lines show 95% confidence intervals. Source: Olist Brazilian e-commerce public dataset, 2016 to 2018. Analysis: Victoria Okorie.</figcaption>
+</figure>
+
+<p>Customers whose first order arrived within a week returned at <strong>{{r1}}%</strong>. Those who waited more than 30 days returned at <strong>{{r5}}%</strong>, close to half the rate. The numbers are small because returning is rare for everyone, but the gap is consistent: each step slower is a step down, and a statistical test confirms the gap between groups is very unlikely to be chance.</p>
+
+<p>Small rates can hide big shifts. Look at it the other way round: a customer delivered within a week was about <strong>{{ratio}} times as likely</strong> to come back as one who waited a month.</p>
+
+<h2><span class="num">2</span>It is the wait, not the broken promise</h2>
+
+<p>The obvious explanation is broken promises. At checkout, every Olist customer sees an estimated delivery date. Surely the customers who never return are the ones whose parcel arrived after that date?</p>
+
+<p>The data says no, and the reason is one of the more surprising details in the whole dataset. Olist's estimates were extremely cautious. The typical customer was promised delivery in <strong>25 days</strong> and received it in 11. <strong>{{early8}}%</strong> of first orders arrived more than a week ahead of the promise. Only about one in twenty arrived late.</p>
+
+<div class="pull">Customers did not judge the parcel against the date on the screen. They judged it against their own patience.<cite>Finding from a logistic regression on {{study}} customers</cite></div>
+
+<p>To separate the two ideas, I used logistic regression, a method that estimates the effect of one factor while holding others constant. I controlled for the customer's region, the order's value, the share of the price that was shipping, the number of items, the payment method, the product category and the season.</p>
+
+<p>After all of that, <strong>each extra week of waiting cut the odds of a return by about {{week_pct}}%</strong>. Lateness against the promised date, on its own, was not statistically significant, and once waiting time was in the model it added nothing at all. The same was true of the review score: it captured the customer's frustration, but it did not predict a return any better than the waiting time already did.</p>
+
+<figure class="chart">
+  <h3>Waiting time stays significant in every model. Lateness never does.</h3>
+  <p class="sub">Odds ratios for returning within 180 days, with 95% confidence intervals. Below 1 means less likely to return. A line that crosses 1 means the effect could be zero.</p>
+  <div class="viz" id="chart-odds"></div>
+  <figcaption>Logistic regression with controls for region, order value, shipping share, items, payment type, category and quarter. Source: Olist Brazilian e-commerce public dataset. Analysis: Victoria Okorie.</figcaption>
+</figure>
+
+<h2><span class="num">3</span>Where the anger goes first</h2>
+
+<p>If slow customers do not complain by leaving immediately, where does the frustration show up? In the review. Olist sends a satisfaction survey when the parcel arrives, and the stars fall off a cliff after the third week.</p>
+
+<figure class="chart">
+  <h3>After a month of waiting, most customers leave a 1 or 2 star review</h3>
+  <p class="sub">Share of first orders rated 1 or 2 stars out of 5, by days to deliver. {{reviewed}} delivered first orders with a review.</p>
+  <div class="viz" id="chart-reviews"></div>
+  <figcaption>Source: Olist Brazilian e-commerce public dataset. Analysis: Victoria Okorie.</figcaption>
+</figure>
+
+<p>Only <strong>{{low1}}%</strong> of customers who received their first parcel within a week gave it one or two stars. Among those who waited more than 30 days it was <strong>{{low5}}%</strong>. For a marketplace, this matters twice: the unhappy customer is less likely to come back, and their public review makes the next stranger less likely to buy at all.</p>
+
+<h2><span class="num">4</span>Geography is not destiny, but it helps</h2>
+
+<p>Brazil is enormous, and most Olist sellers are in the Southeast, around São Paulo. A customer in the Northeast waited almost twice as long, on average, as a customer in the Southeast, and came back less often.</p>
+
+<figure class="chart">
+  <h3>The farther from the sellers, the longer the wait and the lower the return rate</h3>
+  <p class="sub">Study group customers by region of Brazil.</p>
+  <div id="table-region"></div>
+  <figcaption>Region is controlled for in the regression above, so the effect of waiting time is not simply a regional difference. Source: Olist Brazilian e-commerce public dataset.</figcaption>
+</figure>
+
+<p>That raises a fair question: is it really delivery speed, or just that people in different regions shop differently? This is why the regression controls for region. Even comparing customers within the same region, a longer wait still predicted fewer returns. The effect also holds when I follow every delivered customer, not only the 180-day group, using survival curves that track how many customers have come back by each day after delivery.</p>
+
+<figure class="chart">
+  <h3>Fast first deliveries keep earning repeat customers for a year and a half</h3>
+  <p class="sub">Share of customers who have placed a new order, by days since their first order arrived (Kaplan-Meier survival estimate, {{survival_n}} delivered customers). Hover to compare.</p>
+  <div class="legend" id="legend-curve"></div>
+  <div class="viz" id="chart-curve"></div>
+  <figcaption>Kaplan-Meier curves account for customers who joined late and could only be followed for a short time. Source: Olist Brazilian e-commerce public dataset. Analysis: Victoria Okorie.</figcaption>
+</figure>
+
+<h2><span class="num">5</span>The 60-day window</h2>
+
+<p>Knowing <em>who</em> is likely to return is half the job for a growth team. The other half is <em>when</em>. Of the customers who did come back, the median return came about <strong>{{median_return}} days</strong> after the first parcel arrived. But a median hides the shape that matters most for timing a campaign.</p>
+
+<p>The fairer way to look at timing is to ask: of the customers who have not come back yet, what share come back in each month? That is the chance a win-back message is competing for.</p>
+
+<figure class="chart">
+  <h3>The second purchase window: the first 60 days after delivery</h3>
+  <p class="sub">Chance that a customer who has not yet returned places a new order in each 30-day period after their first delivery.</p>
+  <div class="viz" id="chart-window"></div>
+  <figcaption>Kaplan-Meier hazard on {{survival_n}} delivered customers. Source: Olist Brazilian e-commerce public dataset. Analysis: Victoria Okorie.</figcaption>
+</figure>
+
+<p>The first 30 days after delivery carry a return chance about <strong>{{w1x}} times</strong> the long-run monthly level. Days 31 to 60 are still about <strong>{{w2x}} times</strong> higher. After roughly day 90, the chance settles into a low, flat trickle of about <strong>{{base}}%</strong> a month and stays there. The customer has not left in a dramatic way. They have simply gone quiet.</p>
+
+<div class="pull">The second order is won or lost in the first two months. After that, a customer is not churning. They are forgetting.</div>
+
+<h2><span class="num">6</span>The second order is the real conversion</h2>
+
+<p>There is one more reason the window matters. When I followed customers who did come back, their behaviour changed. A first-time customer had about a <strong>{{g1}}%</strong> chance of ordering again within 180 days. A customer who had already ordered twice had an <strong>{{g2}}%</strong> chance of a third order in the same time.</p>
+
+<figure class="chart">
+  <h3>Win the second order and the third becomes {{gx}} times as likely</h3>
+  <p class="sub">Chance of placing the next order within 180 days (Kaplan-Meier estimate).</p>
+  <div class="viz" id="chart-gate"></div>
+  <figcaption>Second order: {{survival_n}} delivered customers. Third order: {{gate_n}} customers who had placed a second order. Source: Olist Brazilian e-commerce public dataset.</figcaption>
+</figure>
+
+<p>I also checked whether customers who came back <em>quickly</em> became more loyal than those who came back late. They did not: the chance of a third order was similar whether the second came within 30 days or after 90, and the difference was not statistically significant. The lesson for a marketer is simple. What matters is getting the second order at all, and the first 60 days are when it is easiest to get.</p>
+
+<h2><span class="num">7</span>What a growth team could do on Monday</h2>
+
+<p>Put together, the findings point to a playbook that joins two teams that rarely sit together: operations, which owns the parcel, and marketing, which owns the customer.</p>
+
+<div class="playbook">
+  <div class="step"><div class="when">Before the order<small>Operations</small></div><div><h4>Protect the first delivery</h4><p>Route first-time buyers to the fastest sellers and carriers available, especially in the North and Northeast. The first parcel is the one that decides whether there will be a second.</p></div></div>
+  <div class="step"><div class="when">Days 3 to 10<small>Customer experience</small></div><div><h4>Say thank you, ask for the review</h4><p>A how-to-use note and review request. For any first order that took more than three weeks, add a sincere apology and a small credit toward the next order.</p></div></div>
+  <div class="step"><div class="when">Days 14 to 30<small>Marketing</small></div><div><h4>Send the first real offer</h4><p>This is the period with the highest chance of return. Personalise it by the first purchase category: bed, bath and table, sports and leisure, fashion accessories and perfumery all bring customers back above the average.</p></div></div>
+  <div class="step"><div class="when">Days 45 to 60<small>Marketing</small></div><div><h4>One stronger reminder</h4><p>A last, slightly bigger incentive for customers who have not returned, while the window is still open.</p></div></div>
+  <div class="step"><div class="when">After day 90<small>Marketing</small></div><div><h4>Stop spending, keep in touch</h4><p>The chance of return is low and flat. Move these customers to a low-cost newsletter instead of paid retargeting.</p></div></div>
+  <div class="step"><div class="when">After order two<small>Lifecycle</small></div><div><h4>Treat them as a new segment</h4><p>Third orders came a median of about {{third_gap}} days after the second. Plan the next nudge around then, and measure "second order rate" as the main retention goal.</p></div></div>
+</div>
+
+<p>How much is this worth? Honestly, it depends, and the data cannot promise a number. If every customer whose first parcel took more than two weeks had returned at the rate of customers delivered in 8 to 14 days, the study group would have produced about <strong>{{extra_returners}} more returning customers</strong>, an increase of roughly <strong>{{extra_pct}}%</strong>. On a marketplace where only about 2 in 100 customers return, that is a modest but real gain, and it comes from something a business already controls. The dashboard that comes with this story has a planner where a team can change the assumptions and see the effect.</p>
+
+<div class="box">
+  <h3>What this data cannot tell us</h3>
+  <ul>
+    <li><strong>It shows association, not proof of cause.</strong> I controlled for the obvious differences between customers, but something unmeasured could still link slow deliveries and fewer returns. The real test is an experiment: speed up delivery for a random group of first-time buyers and compare.</li>
+    <li><strong>Repeat purchase is rare here.</strong> About 1,800 customers returned in total, so some groups, such as late deliveries, are small and their rates are uncertain. I show confidence intervals for that reason.</li>
+    <li><strong>There are no marketing campaigns in the data.</strong> The timing recommendations come from natural return behaviour. Any win-back campaign should be tested with a holdout group before it is rolled out.</li>
+    <li><strong>It is one marketplace, in one country, in 2016 to 2018.</strong> Expectations about delivery speed have risen since then, which, if anything, makes the first delivery matter more.</li>
+  </ul>
+</div>
+
+<p>Most growth conversations start with acquisition: more traffic, more first orders. This data suggests a quieter, cheaper lever sitting in the warehouse and the delivery van. The first parcel is not the end of the sale. For a new customer, it is the first page of the relationship, and they decide quickly whether there will be a second.</p>
+
+</div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <h3>How this was made</h3>
+    <p><strong>Data:</strong> Olist Brazilian e-commerce public dataset: 99,441 anonymised orders from 96,096 customers placed between September 2016 and August 2018, released by Olist (also published on Kaggle). Customers were matched across orders with the dataset's unique customer identifier.</p>
+    <p><strong>Study group:</strong> {{study}} customers whose first order was delivered and who could be followed for 180 days after delivery. A "return" is a new, not cancelled order placed after the first parcel arrived. Orders placed before it arrived (mostly same-day split baskets) were not counted.</p>
+    <p><strong>Methods:</strong> Python (pandas) for cleaning, SQLite and Structured Query Language for the analysis queries, chi-square tests, logistic regression with controls, and Kaplan-Meier survival estimates to handle customers followed for different lengths of time. Full code, queries and notebook are in the project repository.</p>
+    <p><strong>About the author:</strong> Victoria Okorie is a data and growth analyst with a background in global health and hands-on experience in online sales, Google Ads and customer retention for a fragrance brand.</p>
+  </div>
+</footer>
+
+<script>
+const DATA = /*DATA*/null;
+
+/* ---------- theme toggle ---------- */
+(function () {
+  const btn = document.getElementById("themebtn");
+  const root = document.documentElement;
+  let saved = null;
+  try { saved = localStorage.getItem("story-theme"); } catch (e) {}
+  if (saved) root.setAttribute("data-theme", saved);
+  const isDark = () => root.getAttribute("data-theme") === "dark" ||
+    (!root.getAttribute("data-theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  const label = () => { btn.textContent = isDark() ? "Light mode" : "Dark mode"; };
+  label();
+  btn.addEventListener("click", () => {
+    const next = isDark() ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem("story-theme", next); } catch (e) {}
+    label(); renderAll();
+  });
+})();
+
+/* ---------- hero parcels ---------- */
+(function () {
+  const el = document.getElementById("parcels");
+  for (let i = 0; i < 100; i++) {
+    const s = document.createElement("span");
+    if (i >= 97) s.className = "back";
+    el.appendChild(s);
+  }
+})();
+
+/* ---------- tiny chart kit ---------- */
+const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const NS = "http://www.w3.org/2000/svg";
+function el(tag, attrs, parent) {
+  const n = document.createElementNS(NS, tag);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(n);
+  return n;
+}
+function setup(id, height) {
+  const host = document.getElementById(id);
+  host.innerHTML = "";
+  const w = Math.max(300, host.clientWidth);
+  const svg = el("svg", { viewBox: `0 0 ${w} ${height}`, role: "img" }, host);
+  const tip = document.createElement("div");
+  tip.className = "tip"; host.appendChild(tip);
+  return { host, svg, tip, w, h: height };
+}
+function showTip(ctx, html, x, y) {
+  ctx.tip.innerHTML = html; ctx.tip.style.opacity = 1;
+  const tw = ctx.tip.offsetWidth;
+  let left = x + 12; if (left + tw > ctx.host.clientWidth) left = x - tw - 12;
+  ctx.tip.style.left = Math.max(0, left) + "px"; ctx.tip.style.top = Math.max(0, y - 10) + "px";
+}
+function hideTip(ctx) { ctx.tip.style.opacity = 0; }
+function txt(parent, x, y, s, o = {}) {
+  const t = el("text", { x, y, "font-size": o.size || 12, fill: o.fill || css("--muted"),
+    "text-anchor": o.anchor || "start", "font-weight": o.weight || 400, "dominant-baseline": o.base || "auto" }, parent);
+  t.textContent = s; return t;
+}
+function niceMax(v, step) { return Math.ceil(v / step) * step; }
+
+/* Vertical bars with optional confidence intervals */
+function bars(id, rows, o) {
+  const narrow = document.getElementById(id).clientWidth < 520;
+  const ctx = setup(id, o.height || 300);
+  const m = { t: 18, r: 8, b: narrow ? 58 : 48, l: 40 };
+  const W = ctx.w - m.l - m.r, H = ctx.h - m.t - m.b;
+  const max = o.max;
+  const y = (v) => m.t + H - (v / max) * H;
+  for (let g = 0; g <= max + 1e-9; g += o.step) {
+    el("line", { x1: m.l, x2: ctx.w - m.r, y1: y(g), y2: y(g), stroke: css("--grid") }, ctx.svg);
+    txt(ctx.svg, m.l - 8, y(g) + 4, o.fmtAxis(g), { anchor: "end", size: 11 });
+  }
+  const bw = W / rows.length, gap = Math.min(18, bw * 0.28);
+  rows.forEach((r, i) => {
+    const x = m.l + i * bw + gap / 2, w = bw - gap, top = y(r.value);
+    const color = css(r.color);
+    const p = el("path", { d: `M${x},${y(0)} L${x},${top + 4} Q${x},${top} ${x + 4},${top} L${x + w - 4},${top} Q${x + w},${top} ${x + w},${top + 4} L${x + w},${y(0)} Z`, fill: color }, ctx.svg);
+    if (r.low != null) {
+      const cx = x + w / 2;
+      el("line", { x1: cx, x2: cx, y1: y(r.low), y2: y(r.high), stroke: css("--ink-2"), "stroke-width": 1.2 }, ctx.svg);
+      el("line", { x1: cx - 4, x2: cx + 4, y1: y(r.low), y2: y(r.low), stroke: css("--ink-2"), "stroke-width": 1.2 }, ctx.svg);
+      el("line", { x1: cx - 4, x2: cx + 4, y1: y(r.high), y2: y(r.high), stroke: css("--ink-2"), "stroke-width": 1.2 }, ctx.svg);
+    }
+    if (r.label !== false) txt(ctx.svg, x + w / 2, (r.low != null ? y(r.high) : top) - 7, o.fmt(r.value), { anchor: "middle", size: 12.5, weight: 700, fill: css("--ink") });
+    const lines = (narrow && r.short ? r.short : r.name).split("\n");
+    lines.forEach((ln, k) => txt(ctx.svg, x + w / 2, ctx.h - m.b + 18 + k * 14, ln, { anchor: "middle", size: narrow ? 10.5 : 11.5, fill: css("--ink-2") }));
+    const hit = el("rect", { x: m.l + i * bw, y: m.t, width: bw, height: H, fill: "transparent" }, ctx.svg);
+    const on = (e) => { p.setAttribute("opacity", .82); const b = ctx.host.getBoundingClientRect(); showTip(ctx, o.tip(r), e.clientX - b.left, e.clientY - b.top); };
+    hit.addEventListener("mousemove", on); hit.addEventListener("touchstart", (e) => on(e.touches[0]), { passive: true });
+    hit.addEventListener("mouseleave", () => { p.setAttribute("opacity", 1); hideTip(ctx); });
+  });
+  el("line", { x1: m.l, x2: ctx.w - m.r, y1: y(0), y2: y(0), stroke: css("--ink-2") }, ctx.svg);
+}
+
+/* Forest plot for odds ratios */
+function forest(id, rows) {
+  const narrow = document.getElementById(id).clientWidth < 560;
+  const rowH = narrow ? 58 : 46;
+  const ctx = setup(id, rows.length * rowH + 50);
+  const m = { t: 10, r: narrow ? 56 : 120, b: 36, l: narrow ? 10 : 230 };
+  const lo = 0.4, hi = 2.0;
+  const W = ctx.w - m.l - m.r;
+  const x = (v) => m.l + (Math.log(v) - Math.log(lo)) / (Math.log(hi) - Math.log(lo)) * W;
+  [0.5, 0.75, 1, 1.5, 2].forEach((g) => {
+    el("line", { x1: x(g), x2: x(g), y1: m.t, y2: ctx.h - m.b, stroke: g === 1 ? css("--ink") : css("--grid"), "stroke-width": g === 1 ? 1.2 : 1 }, ctx.svg);
+    txt(ctx.svg, x(g), ctx.h - m.b + 18, String(g), { anchor: "middle", size: 11 });
+  });
+  txt(ctx.svg, x(1) - 6, ctx.h - 4, "← less likely to return", { anchor: "end", size: 11 });
+  txt(ctx.svg, x(1) + 6, ctx.h - 4, "more likely →", { size: 11 });
+  rows.forEach((r, i) => {
+    const cy = m.t + i * rowH + (narrow ? 38 : rowH / 2);
+    const sig = r.p < 0.05, c = sig ? css("--alert") : css("--mid");
+    if (narrow) txt(ctx.svg, m.l, cy - 18, r.name, { size: 11.5, fill: css("--ink-2") });
+    else { txt(ctx.svg, m.l - 14, cy - 3, r.name, { anchor: "end", size: 12, fill: css("--ink"), weight: 600 });
+           txt(ctx.svg, m.l - 14, cy + 12, r.model, { anchor: "end", size: 11 }); }
+    el("line", { x1: x(Math.max(lo, r.low)), x2: x(Math.min(hi, r.high)), y1: cy, y2: cy, stroke: c, "stroke-width": 2.4, "stroke-linecap": "round" }, ctx.svg);
+    const dot = el("circle", { cx: x(r.or), cy, r: 6, fill: c, stroke: css("--surface"), "stroke-width": 2 }, ctx.svg);
+    txt(ctx.svg, Math.max(x(r.high), x(1)) + 8, cy + 4, r.or.toFixed(2) + (sig ? "" : narrow ? "" : "  not significant"), { size: 11.5, fill: css("--ink"), weight: sig ? 700 : 400 });
+    const hit = el("rect", { x: 0, y: cy - rowH / 2, width: ctx.w, height: rowH, fill: "transparent" }, ctx.svg);
+    const on = (e) => { dot.setAttribute("r", 8); const b = ctx.host.getBoundingClientRect();
+      showTip(ctx, `<b>${r.name}</b><br>${r.model}<br>Odds ratio ${r.or.toFixed(2)} (95% interval ${r.low.toFixed(2)} to ${r.high.toFixed(2)})<br>${sig ? "Statistically significant" : "Not statistically significant"}`, e.clientX - b.left, e.clientY - b.top); };
+    hit.addEventListener("mousemove", on); hit.addEventListener("touchstart", (e) => on(e.touches[0]), { passive: true });
+    hit.addEventListener("mouseleave", () => { dot.setAttribute("r", 6); hideTip(ctx); });
+  });
+}
+
+/* Step lines with crosshair */
+function curves(id, legendId, d) {
+  const narrow = document.getElementById(id).clientWidth < 520;
+  const ctx = setup(id, 320);
+  const m = { t: 12, r: narrow ? 12 : 120, b: 40, l: 40 };
+  const W = ctx.w - m.l - m.r, H = ctx.h - m.t - m.b;
+  const xMax = 540, yMax = 4.5;
+  const x = (v) => m.l + v / xMax * W, y = (v) => m.t + H - v / yMax * H;
+  for (let g = 0; g <= yMax; g += 1) {
+    el("line", { x1: m.l, x2: m.l + W, y1: y(g), y2: y(g), stroke: css("--grid") }, ctx.svg);
+    txt(ctx.svg, m.l - 8, y(g) + 4, g + "%", { anchor: "end", size: 11 });
+  }
+  [0, 90, 180, 270, 365, 540].forEach((g) => txt(ctx.svg, x(g), ctx.h - m.b + 18, String(g), { anchor: "middle", size: 11 }));
+  txt(ctx.svg, m.l + W / 2, ctx.h - 4, "Days after the first order arrived", { anchor: "middle", size: 11 });
+  const lg = document.getElementById(legendId); lg.innerHTML = "";
+  d.series.forEach((s) => {
+    const pts = d.days.map((t, i) => `${x(t).toFixed(1)},${y(s.values[i]).toFixed(1)}`).join(" ");
+    el("polyline", { points: pts, fill: "none", stroke: css(s.color), "stroke-width": 2, "stroke-linejoin": "round" }, ctx.svg);
+    const last = s.values[s.values.length - 1];
+    if (!narrow) txt(ctx.svg, m.l + W + 8, y(last) + 4, `${s.name}  ${last.toFixed(1)}%`, { size: 11.5, fill: css("--ink") });
+    lg.insertAdjacentHTML("beforeend", `<span><i style="background:${css(s.color)}"></i>${s.name}</span>`);
+  });
+  const cross = el("line", { y1: m.t, y2: m.t + H, stroke: css("--ink-2"), "stroke-dasharray": "3 3", opacity: 0 }, ctx.svg);
+  const dots = d.series.map((s) => el("circle", { r: 4.5, fill: css(s.color), stroke: css("--surface"), "stroke-width": 2, opacity: 0 }, ctx.svg));
+  const hit = el("rect", { x: m.l, y: m.t, width: W, height: H, fill: "transparent" }, ctx.svg);
+  const on = (e) => {
+    const b = ctx.svg.getBoundingClientRect(); const scale = ctx.w / b.width;
+    const px = (e.clientX - b.left) * scale;
+    const day = Math.max(0, Math.min(xMax, Math.round((px - m.l) / W * xMax)));
+    const i = d.days.indexOf(day) >= 0 ? d.days.indexOf(day) : day;
+    cross.setAttribute("x1", x(day)); cross.setAttribute("x2", x(day)); cross.setAttribute("opacity", 1);
+    dots.forEach((c, k) => { c.setAttribute("cx", x(day)); c.setAttribute("cy", y(d.series[k].values[i])); c.setAttribute("opacity", 1); });
+    const hb = ctx.host.getBoundingClientRect();
+    showTip(ctx, `<b>Day ${day} after delivery</b><br>` + d.series.map((s) => `${s.name}: ${s.values[i].toFixed(2)}% returned`).join("<br>"), e.clientX - hb.left, e.clientY - hb.top);
+  };
+  hit.addEventListener("mousemove", on); hit.addEventListener("touchmove", (e) => on(e.touches[0]), { passive: true });
+  hit.addEventListener("touchstart", (e) => on(e.touches[0]), { passive: true });
+  hit.addEventListener("mouseleave", () => { cross.setAttribute("opacity", 0); dots.forEach((c) => c.setAttribute("opacity", 0)); hideTip(ctx); });
+  el("line", { x1: m.l, x2: m.l + W, y1: y(0), y2: y(0), stroke: css("--ink-2") }, ctx.svg);
+}
+
+/* Horizontal bars */
+function hbars(id, rows, o) {
+  const ctx = setup(id, rows.length * 64 + 20);
+  const narrow = ctx.w < 520;
+  const m = { t: 6, r: 60, b: 10, l: narrow ? 120 : 180 };
+  const W = ctx.w - m.l - m.r;
+  rows.forEach((r, i) => {
+    const cy = m.t + i * 64, h = 36, w = r.value / o.max * W;
+    const p = el("path", { d: `M${m.l},${cy} L${m.l + w - 4},${cy} Q${m.l + w},${cy} ${m.l + w},${cy + 4} L${m.l + w},${cy + h - 4} Q${m.l + w},${cy + h} ${m.l + w - 4},${cy + h} L${m.l},${cy + h} Z`, fill: css(r.color) }, ctx.svg);
+    txt(ctx.svg, m.l - 12, cy + h / 2 + 4, r.name, { anchor: "end", size: narrow ? 11.5 : 13, fill: css("--ink"), weight: 600 });
+    txt(ctx.svg, m.l + w + 8, cy + h / 2 + 5, o.fmt(r.value), { size: 15, weight: 700, fill: css("--ink") });
+    const hit = el("rect", { x: 0, y: cy - 6, width: ctx.w, height: h + 12, fill: "transparent" }, ctx.svg);
+    const on = (e) => { p.setAttribute("opacity", .82); const b = ctx.host.getBoundingClientRect(); showTip(ctx, o.tip(r), e.clientX - b.left, e.clientY - b.top); };
+    hit.addEventListener("mousemove", on); hit.addEventListener("touchstart", (e) => on(e.touches[0]), { passive: true });
+    hit.addEventListener("mouseleave", () => { p.setAttribute("opacity", 1); hideTip(ctx); });
+  });
+}
+
+function table(id, head, rows) {
+  document.getElementById(id).innerHTML = `<table><tr>${head.map((h) => `<th>${h}</th>`).join("")}</tr>` +
+    rows.map((r) => `<tr>${r.map((c) => `<td>${c}</td>`).join("")}</tr>`).join("") + "</table>";
+}
+
+function renderAll() {
+  const sp = DATA.speed;
+  const speedColors = ["--accent", "--accent", "--context", "--context", "--alert"];
+  bars("chart-speed", sp.map((r, i) => ({ ...r, color: speedColors[i] })), {
+    max: 2.5, step: 0.5, height: 320, fmt: (v) => v.toFixed(2) + "%", fmtAxis: (v) => v.toFixed(1) + "%",
+    tip: (r) => `<b>${r.name.replace("\n", " ")}</b><br>${r.value.toFixed(2)}% returned within 180 days<br>${r.returned.toLocaleString()} of ${r.customers.toLocaleString()} customers<br>95% interval ${r.low.toFixed(2)}% to ${r.high.toFixed(2)}%`
+  });
+  table("table-speed", ["First delivery took", "Customers", "Returned", "Return rate"],
+    sp.map((r) => [r.name.replace("\n", " "), r.customers.toLocaleString(), r.returned.toLocaleString(), r.value.toFixed(2) + "%"]));
+  forest("chart-odds", DATA.odds);
+  bars("chart-reviews", DATA.reviews.map((r, i) => ({ ...r, color: speedColors[i] })), {
+    max: 70, step: 10, height: 300, fmt: (v) => Math.round(v) + "%", fmtAxis: (v) => v + "%",
+    tip: (r) => `<b>${r.name.replace("\n", " ")}</b><br>${r.value.toFixed(1)}% rated 1 or 2 stars<br>Average review ${r.avg.toFixed(2)} out of 5<br>${r.customers.toLocaleString()} first orders`
+  });
+  const rg = DATA.region, maxd = Math.max(...rg.map((r) => r.days));
+  document.getElementById("table-region").innerHTML = `<table class="score"><tr><th>Region</th><th>Customers</th><th>Average days to deliver</th><th>Late</th><th>Returned within 180 days</th></tr>` +
+    rg.map((r) => `<tr><td>${r.region}</td><td>${r.customers.toLocaleString()}</td><td>${r.days.toFixed(1)}<span class="barcell" style="width:${Math.round(r.days / maxd * 60)}px"></span></td><td>${r.late.toFixed(1)}%</td><td><strong>${r.rate.toFixed(2)}%</strong></td></tr>`).join("") + "</table>";
+  curves("chart-curve", "legend-curve", {
+    days: DATA.curve.days,
+    series: [{ name: "Within 7 days", values: DATA.curve.fast, color: "--accent" },
+             { name: "8 to 21 days", values: DATA.curve.mid, color: "--mid" },
+             { name: "More than 21 days", values: DATA.curve.slow, color: "--alert" }]
+  });
+  const win = DATA.window;
+  bars("chart-window", win.map((r, i) => ({ name: r.short, short: r.tiny, value: r.chance, color: i < 2 ? "--accent" : "--context", label: i < 3, cum: r.cum, period: r.period })), {
+    max: 0.6, step: 0.1, height: 300, fmt: (v) => v.toFixed(2) + "%", fmtAxis: (v) => v.toFixed(1) + "%",
+    tip: (r) => `<b>${r.period} after delivery</b><br>${r.value.toFixed(2)}% chance of a second order in this period<br>${r.cum.toFixed(2)}% have returned by the end of it`
+  });
+  hbars("chart-gate", [
+    { name: "Second order", value: DATA.gate[0], color: "--context", n: DATA.gate_n[0] },
+    { name: "Third order", value: DATA.gate[1], color: "--accent", n: DATA.gate_n[1] }], {
+    max: 10, fmt: (v) => v.toFixed(1) + "%",
+    tip: (r) => `<b>${r.name}</b><br>${r.value.toFixed(2)}% chance within 180 days<br>Based on ${r.n.toLocaleString()} customers`
+  });
+}
+let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(renderAll, 120); });
+if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", renderAll);
+document.fonts && document.fonts.ready ? document.fonts.ready.then(renderAll) : renderAll();
+renderAll();
+</script>
+</body>
+</html>

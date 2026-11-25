@@ -1,0 +1,6 @@
+region,customers,avg_delivery_days,pct_late,return_rate_pct
+Southeast,35736,11.1,4.6,1.98
+South,7677,14.6,4.8,1.55
+Central-West,3033,15.4,4.2,1.68
+Northeast,5058,20.1,9.7,1.32
+North,1038,21.7,4.5,1.35

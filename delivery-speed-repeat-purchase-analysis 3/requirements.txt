@@ -1,0 +1,12 @@
+pandas
+numpy
+scipy
+statsmodels
+matplotlib
+openpyxl
+nbformat
+nbconvert
+ipykernel
+notebook
+# optional, only for the PDF copy of the story:
+# playwright

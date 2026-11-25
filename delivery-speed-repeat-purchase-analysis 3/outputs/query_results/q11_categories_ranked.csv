@@ -1,0 +1,18 @@
+category,category_id,customers,return_rate_pct,avg_delivery_days,return_rank
+fashion bags accessories,29,1097,2.73,11.5,1
+sports leisure,68,4246,2.43,12.5,2
+bed bath table,8,5111,2.39,13.6,3
+perfumery,61,1907,2.15,12.5,4
+garden tools,43,2208,2.13,14.1,5
+furniture decor,40,3571,2.1,13.6,6
+health beauty,44,4100,1.95,12.3,7
+baby,7,1415,1.7,13.3,8
+stationery,69,1292,1.63,13.6,9
+watches gifts,74,2465,1.62,12.4,10
+toys,72,2573,1.59,12.2,11
+electronics,27,1256,1.59,13.1,12
+telephony,71,2458,1.51,13.1,13
+computers accessories,16,3362,1.46,13.0,14
+housewares,50,2754,1.45,11.8,15
+auto,6,1762,1.36,13.0,16
+cool stuff,21,2482,1.13,12.1,17

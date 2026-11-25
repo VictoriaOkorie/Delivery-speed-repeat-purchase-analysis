@@ -1,0 +1,5 @@
+factor,chi_square,degrees_of_freedom,p_value,significant_at_5_percent
+Delivery speed band,18.42,4,0.001,True
+Late against the promised date,3.3,1,0.0691,False
+Review score,7.99,4,0.092,False
+Customer region,16.83,4,0.0021,True

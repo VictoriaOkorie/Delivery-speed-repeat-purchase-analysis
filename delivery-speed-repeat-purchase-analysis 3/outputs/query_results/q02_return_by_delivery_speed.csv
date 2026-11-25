@@ -1,0 +1,6 @@
+delivery_speed_band,customers,returned,return_rate_pct,avg_review,share_of_customers_pct
+1. Within 7 days,11514,238,2.07,4.4,21.9
+2. 8 to 14 days,23323,455,1.95,4.32,44.4
+3. 15 to 21 days,11041,173,1.57,4.15,21.0
+4. 22 to 30 days,4475,69,1.54,3.74,8.5
+5. More than 30 days,2189,24,1.1,2.41,4.2

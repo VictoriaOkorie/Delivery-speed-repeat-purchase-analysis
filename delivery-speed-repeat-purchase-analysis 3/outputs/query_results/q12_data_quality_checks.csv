@@ -1,0 +1,7 @@
+check_name,problems
+Duplicate customers,0
+Duplicate orders,0
+Study customers with missing outcome,0
+Negative delivery times,0
+Customer states missing from lookup,0
+Returns dated before first delivery,0

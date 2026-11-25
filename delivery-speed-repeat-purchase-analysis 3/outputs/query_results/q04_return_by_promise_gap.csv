@@ -1,0 +1,6 @@
+promise_band,customers,return_rate_pct,avg_review,avg_delivery_days
+1. 15 or more days early,20537,1.81,4.32,10.2
+2. 8 to 14 days early,21610,1.93,4.3,11.2
+3. 0 to 7 days early,7724,1.73,4.08,17.1
+4. 1 to 7 days late,1526,1.44,2.71,28.1
+5. More than 7 days late,1145,1.22,1.73,46.3
