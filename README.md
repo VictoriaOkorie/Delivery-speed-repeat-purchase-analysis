@@ -4,4 +4,4 @@ Does a slow first delivery stop online shoppers from buying again? Analysis of 5
 
 Interactive dashboard: https://public.tableau.com/app/profile/victoria.okorie/viz/TheFirstDeliveryDecides/DeliveryDashboard
 
-Full project, story and code: open the folder "delivery-speed-repeat-purchase-analysis 3
+Full project, story and code: open the folder "delivery-speed-repeat-purchase-analysis 3"
